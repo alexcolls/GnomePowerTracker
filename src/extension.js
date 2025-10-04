@@ -55,6 +55,8 @@ export default class PowerTrackerExtension extends Extension {
     this._indicator._label = new St.Label({
         text: "? W",
         y_align: Clutter.ActorAlign.CENTER,
+        x_expand: true,
+        natural_width: 100,
     });
     this._indicator.add_child(this._indicator._label);
 
@@ -204,8 +206,11 @@ export default class PowerTrackerExtension extends Extension {
     }
     else if (batPowerStat.length == 1) {
       // We only have one battery, we don't need a label before the wattage.
-      if (batPowerStat[0].power > ZERO_CUTOFF_VALUE || this.show_zero_power)
-        this._indicator._label.set_text(batPowerStat[0].sign+String(batPowerStat[0].power)+"W");
+      if (batPowerStat[0].power > ZERO_CUTOFF_VALUE || this.show_zero_power) {
+        const text = batPowerStat[0].sign+String(batPowerStat[0].power)+"W";
+        this._indicator._label.set_text(text);
+        this._indicator._label.set_tooltip_text(`Power Consumption: ${text}`);
+      }
       else
         this._indicator._label.set_text(NO_POWER_DRAW_LABEL);
     }
